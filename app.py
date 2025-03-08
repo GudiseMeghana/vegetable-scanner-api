@@ -1,18 +1,24 @@
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # Disable GPU usage for TensorFlow
+import os
 import uvicorn
 import numpy as np
 import tensorflow as tf
 from fastapi import FastAPI, File, UploadFile
-from tensorflow.keras.preprocessing.image import load_img, img_to_array
+from tensorflow.keras.preprocessing.image import img_to_array
 from PIL import Image
 import io
 
 # Initialize FastAPI app
 app = FastAPI()
 
+# Root endpoint to check if API is live
+@app.get("/")
+def home():
+    return {"message": "Vegetable Scanning API is running!"}
+
 # Load trained model
-model = tf.keras.models.load_model("vegetable_mobilenetv2_finetuned.h5")
+model = tf.keras.models.load_model("vegetable_scanner_model.h5")
 
 # Define class labels
 class_labels = ['Bean', 'Bitter Gourd', 'Bottle Gourd', 'Brinjal', 'Broccoli', 
@@ -43,11 +49,7 @@ async def predict(file: UploadFile = File(...)):
     except Exception as e:
         return {"error": str(e)}
 
-# Run FastAPI app
-import os
-
-port = int(os.environ.get("PORT", 10000))  # Ensure Render binds to the correct port
-
+# Ensure correct port binding for Render
 if __name__ == "__main__":
-    import uvicorn
+    port = int(os.environ.get("PORT", 10000))  # Ensure Render binds to the correct port
     uvicorn.run(app, host="0.0.0.0", port=port)
