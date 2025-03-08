@@ -45,4 +45,6 @@ async def predict(file: UploadFile = File(...)):
 
 # Run FastAPI app
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    import os
+    port = int(os.environ.get("PORT", 10000))  # Ensure Render binds to the correct port
+    uvicorn.run(app, host="0.0.0.0", port=port)
