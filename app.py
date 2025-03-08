@@ -18,7 +18,7 @@ def home():
     return {"message": "Vegetable Scanning API is running!"}
 
 # Load trained model
-model = tf.keras.models.load_model("vegetable_scanner_model.h5")
+model = tf.keras.models.load_model("vegetable_mobilenetv2_finetuned.h5")
 
 # Define class labels
 class_labels = ['Bean', 'Bitter Gourd', 'Bottle Gourd', 'Brinjal', 'Broccoli', 
