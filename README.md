@@ -13,29 +13,32 @@ Users can **upload an image or use their webcam** to scan vegetables in real tim
 ---
 
 ## 📌 Table of Contents  
-- [Features](#-features)  
-- [Tech Stack](#-tech-stack)  
-- [Installation](#-installation)  
-- [Usage](#-usage)  
-- [Examples](#-examples)  
-- [API Documentation](#-api-documentation)  
-- [Contributing](#-contributing)  
-- [License](#-license)  
-- [Acknowledgements](#-acknowledgements)  
+- [Features](#features)  
+- [Tech Stack](#tech-stack)  
+- [Installation](#installation)  
+- [Usage](#usage)  
+- [Examples](#examples)  
+- [API Documentation](#api-documentation)  
+- [Contributing](#contributing)  
+- [License](#license)  
+- [Acknowledgements](#acknowledgements)  
 
-## 📌 Features  
+<h2 id="features">📌 Features</h2>
+
 - ✅ **Upload images to detect vegetables**  
 - ✅ **Live webcam scanning for real-time detection**  
 - ✅ **Confidence score for each prediction**  
 - ✅ **Fast and lightweight API**  
 
-## 🏗️ Tech Stack  
+<h2 id="tech-stack">🏗️ Tech Stack</h2>
+
 - **Backend:** FastAPI (Python)  
 - **Frontend:** HTML, CSS, JavaScript (Vercel)  
 - **Model:** CNN (TensorFlow/Keras)  
 - **Deployment:** Render (Backend) & Vercel (Frontend)  
 
-## ⚙️ Installation  
+<h2 id="installation">⚙️ Installation</h2>
+
 1. **Clone the repository:**  
     ```sh  
     git clone https://github.com/GudiseMeghana/vegetable-scanner-api.git  
@@ -58,16 +61,21 @@ Users can **upload an image or use their webcam** to scan vegetables in real tim
 3. **Set up the frontend:**  
     - Open `index.html` in your preferred browser.  
 
-## 🚀 Usage  
+<h2 id="usage">🚀 Usage</h2>
+
 - **Upload an image:** Click on the "Upload" button to upload an image of a vegetable.  
 - **Use webcam:** Click on the "Capture Image" button to start real-time scanning.  
 - **View results:** The detected vegetable and its confidence score will be displayed on the screen.  
 
-## 📸 Examples  
-- Example 1: Uploading an image of a tomato and getting the detection result.  
-- Example 2: Using the webcam to scan a carrot in real time.  
+<h2 id="examples">📸 Examples</h2>
 
-## 📚 API Documentation  
+- Example 1: Uploading an image of a tomato and getting the detection result.
+  ![Tomato Detection](examples/images/tomato_example.jpg)
+- Example 2: Using the webcam to scan a carrot in real time.
+  ![Carrot Detection](examples/images/carrot_example.jpg)
+
+<h2 id="api-documentation">📚 API Documentation</h2>
+
 - **Endpoint:** `/predict`  
     - **Method:** `POST`  
     - **Description:** Upload an image to get the vegetable detection result.  
@@ -89,17 +97,20 @@ Users can **upload an image or use their webcam** to scan vegetables in real tim
         }  
         ```  
 
-## 🤝 Contributing  
+<h2 id="contributing">🤝 Contributing</h2>
+
 1. Fork the repository.  
 2. Create a new branch: `git checkout -b feature-name`  
 3. Make your changes and commit them: `git commit -m 'Add new feature'`  
 4. Push to the branch: `git push origin feature-name`  
 5. Create a pull request.  
 
-## 📜 License  
+<h2 id="license">📜 License</h2>
+
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.  
 
-## 🙏 Acknowledgements  
+<h2 id="acknowledgements">🙏 Acknowledgements</h2>
+
 - Kaggle for providing the vegetable dataset.  
 - TensorFlow/Keras for the deep learning framework.  
 - FastAPI for the web framework.  
