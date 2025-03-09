@@ -1,3 +1,12 @@
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Replace * with your frontend URL if hosted
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # Disable GPU usage for TensorFlow
 import os
