@@ -119,20 +119,22 @@
             canvas.height = video.videoHeight;
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-            // Convert canvas image to a Blob
+            // Convert canvas image to a Blob and show in preview
             canvas.toBlob(blob => {
                 const capturedURL = URL.createObjectURL(blob);
-                preview.src = capturedURL;  // Show captured image
+                preview.src = capturedURL;  
                 preview.style.display = "block";
-                video.style.display = "none"; // Hide webcam
-                stopCamera(); // Stop camera after capturing
+                video.style.display = "none"; 
+                stopCamera(); 
+
+                // Send captured image for scanning
                 sendImageToAPI(blob);
             }, "image/jpeg");
         });
 
         // Upload Image Manually
         fileInput.addEventListener("change", function(event) {
-            if (stream) stopCamera(); // Stop camera if running
+            if (stream) stopCamera(); 
 
             const file = event.target.files[0];
             if (file) {
@@ -140,7 +142,7 @@
                 reader.onload = function(e) {
                     preview.src = e.target.result;
                     preview.style.display = "block";
-                    video.style.display = "none"; // Hide video when uploading an image
+                    video.style.display = "none"; 
                     captureButton.classList.add("hidden");
                     startCameraButton.classList.remove("hidden");
                 };
@@ -161,7 +163,7 @@
         // Send Image to API
         function sendImageToAPI(imageBlob) {
             const formData = new FormData();
-            formData.append("file", imageBlob);
+            formData.append("file", imageBlob, "image.jpg");  // Ensure correct file name
 
             resultDiv.innerHTML = "";
             loadingDiv.classList.remove("hidden");
