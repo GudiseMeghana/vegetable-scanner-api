@@ -23,6 +23,8 @@
             border-radius: 12px; 
             box-shadow: 0 4px 10px rgba(0, 255, 127, 0.2); 
             z-index: 10;
+            padding: 20px;
+            text-align: center;
         }
         .glow-btn { 
             transition: all 0.3s ease-in-out; 
@@ -45,7 +47,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background:'/Users/meghanagudise/Desktop/vegetable-scanner-api/bg1.jpeg' center/cover no-repeat; /* Replace with a futuristic animated background */
+            background: url('https://i.imgur.com/8z8zFZh.png') center/cover no-repeat; /* Replace with a futuristic animated background */
             opacity: 0.2;
             animation: moveBg 30s linear infinite alternate;
             z-index: 1;
@@ -54,19 +56,32 @@
             from { transform: translateX(0) translateY(0); }
             to { transform: translateX(-30px) translateY(-30px); }
         }
+        video, canvas {
+            width: 100%;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="animated-bg"></div>
-    <div class="glass p-8 w-96 text-center relative">
+    <div class="glass w-96 text-center relative">
         <h2 class="text-2xl font-bold text-green-400">Vegetable Scanner AI</h2>
+        
+        <!-- File Upload Section -->
         <label for="imageInput" class="cursor-pointer mt-4 block">
             <input type="file" id="imageInput" class="hidden" accept="image/*">
             <div class="border-2 border-dashed border-green-400 p-6 rounded-lg">
                 <p class="text-gray-300">Click to upload an image</p>
             </div>
         </label>
-        <img id="preview" src="" alt="Image Preview" class="mt-4 w-full rounded-lg hidden">
+        
+        <!-- Live Camera Section -->
+        <video id="video" autoplay></video>
+        <canvas id="canvas" class="hidden"></canvas>
+        <button id="captureButton" class="glow-btn bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-blue-600">
+            Capture & Scan
+        </button>
         
         <button id="scanButton" class="glow-btn bg-green-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-green-600">
             Scan Vegetable
@@ -80,32 +95,42 @@
     </div>
     
     <script>
-        const apiUrl = "https://vegetable-scanner-api.onrender.com/predict/"; // Ensure the correct URL is used
+        const apiUrl = "https://vegetable-scanner-api.onrender.com/predict/"; // Update with actual API URL
 
-        document.getElementById("imageInput").addEventListener("change", function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById("preview").src = e.target.result;
-                    document.getElementById("preview").classList.remove("hidden");
-                };
-                reader.readAsDataURL(file);
-            }
+        const video = document.getElementById("video");
+        const canvas = document.getElementById("canvas");
+        const captureButton = document.getElementById("captureButton");
+        const fileInput = document.getElementById("imageInput");
+        const resultDiv = document.getElementById("result");
+        const loadingDiv = document.getElementById("loading");
+
+        // Start Webcam
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => { video.srcObject = stream; })
+            .catch(err => console.error("Camera access denied!", err));
+
+        // Capture Image from Video
+        captureButton.addEventListener("click", function() {
+            const context = canvas.getContext("2d");
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            canvas.toBlob(blob => {
+                sendImageToAPI(blob);
+            }, "image/jpeg");
         });
 
-        document.getElementById("scanButton").addEventListener("click", function() {
-            const fileInput = document.getElementById("imageInput");
-            const resultDiv = document.getElementById("result");
-            const loadingDiv = document.getElementById("loading");
-            
-            if (!fileInput.files.length) {
-                alert("Please select an image!");
-                return;
-            }
+        // Upload Image Manually
+        fileInput.addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            if (file) { sendImageToAPI(file); }
+        });
 
+        // Send Image to API
+        function sendImageToAPI(imageBlob) {
             const formData = new FormData();
-            formData.append("file", fileInput.files[0]);
+            formData.append("file", imageBlob);
 
             resultDiv.innerHTML = "";
             loadingDiv.classList.remove("hidden");
@@ -127,8 +152,7 @@
                 resultDiv.innerHTML = "<p class='text-red-500'>Error scanning image</p>";
                 console.error("Error:", error);
             });
-        });
+        }
     </script>
-
 </body>
 </html>
