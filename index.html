@@ -7,11 +7,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { 
-            background: linear-gradient(135deg, #0D1117, #1B2735, #283E51); 
+            background: #0D1117; 
             color: white; 
-            font-family: 'Poppins', sans-serif; 
-            overflow: hidden; 
-            position: relative;
+            font-family: 'Poppins', sans-serif;
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -21,8 +19,8 @@
             background: rgba(255, 255, 255, 0.1); 
             backdrop-filter: blur(10px); 
             border-radius: 12px; 
-            box-shadow: 0 4px 10px rgba(0, 255, 127, 0.2); 
-            z-index: 10;
+            box-shadow: 0 4px 15px rgba(0, 255, 127, 0.2); 
+            width: 350px;
             padding: 20px;
             text-align: center;
         }
@@ -34,25 +32,25 @@
             transform: scale(1.05); 
             box-shadow: 0 0 20px #00FF7F; 
         }
-        .loading { 
+        video, #preview { 
+            width: 100%; 
+            border-radius: 10px; 
+            margin-top: 10px; 
+            display: none;
+        }
+        #loading { 
             display: none; 
             animation: spin 1s linear infinite; 
         }
         @keyframes spin { 
             100% { transform: rotate(360deg); } 
         }
-        video, canvas, #preview {
-            width: 100%;
-            border-radius: 10px;
-            margin-top: 10px;
-            display: none;
-        }
     </style>
 </head>
 <body>
-    <div class="glass w-96 text-center relative">
+    <div class="glass">
         <h2 class="text-2xl font-bold text-green-400">Vegetable Scanner AI</h2>
-        
+
         <!-- File Upload Section -->
         <label for="imageInput" class="cursor-pointer mt-4 block">
             <input type="file" id="imageInput" class="hidden" accept="image/*">
@@ -60,151 +58,139 @@
                 <p class="text-gray-300">Click to upload an image</p>
             </div>
         </label>
-        
+
         <img id="preview" src="" alt="Image Preview">
-        
+
         <!-- Live Camera Section -->
         <video id="video" autoplay></video>
         <canvas id="canvas" class="hidden"></canvas>
 
-        <button id="startCamera" class="glow-btn bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-blue-600">
-            Start Camera
-        </button>
-        <button id="captureButton" class="glow-btn bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-blue-600 hidden">
-            Capture & Scan
-        </button>
-        
-        <button id="scanButton" class="glow-btn bg-green-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-green-600">
-            Scan Uploaded Image
-        </button>
-        
-        <div id="loading" class="hidden mt-4">
+        <div class="flex justify-center gap-4 mt-4">
+            <button id="startCamera" class="glow-btn bg-blue-500 text-white px-4 py-2 rounded-lg">
+                Start Camera
+            </button>
+            <button id="stopCamera" class="glow-btn bg-red-500 text-white px-4 py-2 rounded-lg hidden">
+                Stop Camera
+            </button>
+        </div>
+
+        <div id="loading" class="mt-4">
             <div class="w-8 h-8 border-4 border-green-400 border-t-transparent rounded-full loading"></div>
         </div>
-        
+
         <div id="result" class="mt-4 text-gray-300 font-semibold"></div>
     </div>
-    
+
     <script>
-    const apiUrl = "https://vegetable-scanner-api.onrender.com/predict/";
-    const video = document.getElementById("video");
-    const canvas = document.getElementById("canvas");
-    const startCameraButton = document.getElementById("startCamera");
-    const captureButton = document.getElementById("captureButton");
-    const scanButton = document.getElementById("scanButton");
-    const fileInput = document.getElementById("imageInput");
-    const resultDiv = document.getElementById("result");
-    const loadingDiv = document.getElementById("loading");
-    const preview = document.getElementById("preview");
+        const apiUrl = "https://vegetable-scanner-api.onrender.com/predict/";
+        const video = document.getElementById("video");
+        const canvas = document.getElementById("canvas");
+        const startCameraButton = document.getElementById("startCamera");
+        const stopCameraButton = document.getElementById("stopCamera");
+        const fileInput = document.getElementById("imageInput");
+        const resultDiv = document.getElementById("result");
+        const loadingDiv = document.getElementById("loading");
+        const preview = document.getElementById("preview");
 
-    let stream = null;
-    let capturedFile = null; // ✅ Store the captured image file
+        let stream = null;
+        let isScanning = false;
 
-    // Start Camera (Back Camera Support)
-    startCameraButton.addEventListener("click", function() {
-        navigator.mediaDevices.getUserMedia({ 
-            video: { facingMode: { exact: "environment" } } // ✅ Use back camera on mobile
-        })
-        .then(camStream => {
-            stream = camStream;
-            video.srcObject = stream;
-            video.style.display = "block";
-            captureButton.classList.remove("hidden");
-            startCameraButton.classList.add("hidden");
-            preview.style.display = "none"; // Hide uploaded image
-        })
-        .catch(err => {
-            console.warn("Back camera not available, switching to default camera.");
-            fallbackToDefaultCamera();
+        // Start Camera with Automatic Detection
+        startCameraButton.addEventListener("click", function () {
+            startCamera();
         });
-    });
 
-    // Fallback if Back Camera is Not Available
-    function fallbackToDefaultCamera() {
-        navigator.mediaDevices.getUserMedia({ video: true })
-        .then(camStream => {
-            stream = camStream;
-            video.srcObject = stream;
-            video.style.display = "block";
-            captureButton.classList.remove("hidden");
-            startCameraButton.classList.add("hidden");
-            preview.style.display = "none";
-        })
-        .catch(err => console.error("Camera access denied!", err));
-    }
+        function startCamera() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(camStream => {
+                    stream = camStream;
+                    video.srcObject = stream;
+                    video.style.display = "block";
+                    startCameraButton.classList.add("hidden");
+                    stopCameraButton.classList.remove("hidden");
+                    preview.style.display = "none";
+                    isScanning = true;
+                    detectFromLiveCamera();
+                })
+                .catch(err => console.error("Camera access denied!", err));
+        }
 
-    // Capture Image from Video & Display in Preview
-    captureButton.addEventListener("click", function() {
-        const context = canvas.getContext("2d");
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        // Live Camera Auto-detection (Frame Capture Every 2 Seconds)
+        function detectFromLiveCamera() {
+            if (!isScanning) return;
 
-        // Convert canvas image to a Blob and show in preview
-        canvas.toBlob(blob => {
-            capturedFile = new File([blob], "captured_image.jpg", { type: "image/jpeg" }); // ✅ FIXED: Store the file
-            const capturedURL = URL.createObjectURL(blob);
-            preview.src = capturedURL;
-            preview.style.display = "block";
-            video.style.display = "none"; // Hide webcam
+            const context = canvas.getContext("2d");
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            canvas.toBlob(blob => {
+                if (blob) {
+                    sendImageToAPI(blob);
+                }
+            }, "image/jpeg");
+
+            setTimeout(detectFromLiveCamera, 2000); // Scan every 2 seconds
+        }
+
+        // Auto Detect Image on Upload
+        fileInput.addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = "block";
+                    video.style.display = "none";
+                };
+                reader.readAsDataURL(file);
+
+                sendImageToAPI(file);
+            }
+        });
+
+        // Send Image to API
+        function sendImageToAPI(imageBlob) {
+            const formData = new FormData();
+            formData.append("file", imageBlob);
+
+            resultDiv.innerHTML = "Detecting...";
+            loadingDiv.classList.remove("hidden");
+
+            fetch(apiUrl, {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                loadingDiv.classList.add("hidden");
+                resultDiv.innerHTML = `
+                    <p class="text-lg">Vegetable: <strong>${data.vegetable}</strong></p>
+                    <p class="text-lg">Confidence: <strong>${(data.confidence * 100).toFixed(2)}%</strong></p>
+                `;
+            })
+            .catch(error => {
+                loadingDiv.classList.add("hidden");
+                resultDiv.innerHTML = "<p class='text-red-500'>Error detecting vegetable</p>";
+                console.error("Error:", error);
+            });
+        }
+
+        // Stop Camera & Scanning
+        stopCameraButton.addEventListener("click", function () {
             stopCamera();
-        }, "image/jpeg");
-    });
-
-    // Upload Image Manually
-    fileInput.addEventListener("change", function(event) {
-        if (stream) stopCamera(); // Stop camera if running
-
-        const file = event.target.files[0];
-        if (file) {
-            capturedFile = file; // ✅ Store uploaded file
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.style.display = "block";
-                video.style.display = "none"; // Hide video when uploading an image
-                captureButton.classList.add("hidden");
-                startCameraButton.classList.remove("hidden");
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    // Scan Captured or Uploaded Image
-    scanButton.addEventListener("click", function() {
-        if (!capturedFile) {
-            alert("Please upload or capture an image first!");
-            return;
-        }
-        sendImageToAPI(capturedFile);
-    });
-
-    // Send Image to API
-    function sendImageToAPI(imageFile) {
-        const formData = new FormData();
-        formData.append("file", imageFile);
-
-        resultDiv.innerHTML = "";
-        loadingDiv.classList.remove("hidden");
-
-        fetch(apiUrl, {
-            method: "POST",
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            loadingDiv.classList.add("hidden");
-            resultDiv.innerHTML = `
-                <p class="text-lg">Vegetable: <strong>${data.vegetable}</strong></p>
-                <p class="text-lg">Confidence: <strong>${(data.confidence * 100).toFixed(2)}%</strong></p>
-            `;
-        })
-        .catch(error => {
-            loadingDiv.classList.add("hidden");
-            resultDiv.innerHTML = "<p class='text-red-500'>Error scanning image</p>";
-            console.error("Error:", error);
         });
-    }
-</script>
+
+        function stopCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+            isScanning = false;
+            video.style.display = "none";
+            startCameraButton.classList.remove("hidden");
+            stopCameraButton.classList.add("hidden");
+        }
+    </script>
 </body>
 </html>
