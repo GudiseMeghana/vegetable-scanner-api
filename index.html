@@ -91,12 +91,14 @@
     const canvas = document.getElementById("canvas");
     const startCameraButton = document.getElementById("startCamera");
     const captureButton = document.getElementById("captureButton");
+    const scanButton = document.getElementById("scanButton");
     const fileInput = document.getElementById("imageInput");
     const resultDiv = document.getElementById("result");
     const loadingDiv = document.getElementById("loading");
     const preview = document.getElementById("preview");
 
     let stream = null;
+    let capturedFile = null; // ✅ Store the captured image file
 
     // Start Webcam on Button Click
     startCameraButton.addEventListener("click", function() {
@@ -121,29 +123,27 @@
 
         // Convert canvas image to a Blob and show in preview
         canvas.toBlob(blob => {
-            const file = new File([blob], "image.jpg", { type: "image/jpeg" }); // ✅ FIXED: Create a File object
+            capturedFile = new File([blob], "captured_image.jpg", { type: "image/jpeg" }); // ✅ FIXED: Store the file
             const capturedURL = URL.createObjectURL(blob);
-            preview.src = capturedURL;  
+            preview.src = capturedURL;
             preview.style.display = "block";
-            video.style.display = "none"; 
-            stopCamera(); 
-
-            // ✅ FIXED: Now send as a file to the API
-            sendImageToAPI(file);
+            video.style.display = "none"; // Hide webcam
+            stopCamera();
         }, "image/jpeg");
     });
 
     // Upload Image Manually
     fileInput.addEventListener("change", function(event) {
-        if (stream) stopCamera(); 
+        if (stream) stopCamera(); // Stop camera if running
 
         const file = event.target.files[0];
         if (file) {
+            capturedFile = file; // ✅ Store uploaded file
             const reader = new FileReader();
             reader.onload = function(e) {
                 preview.src = e.target.result;
                 preview.style.display = "block";
-                video.style.display = "none"; 
+                video.style.display = "none"; // Hide video when uploading an image
                 captureButton.classList.add("hidden");
                 startCameraButton.classList.remove("hidden");
             };
@@ -151,20 +151,19 @@
         }
     });
 
-    // Scan Uploaded Image
-    document.getElementById("scanButton").addEventListener("click", function() {
-        const file = fileInput.files[0];
-        if (!file) {
-            alert("Please select an image first!");
+    // Scan Captured or Uploaded Image
+    scanButton.addEventListener("click", function() {
+        if (!capturedFile) {
+            alert("Please upload or capture an image first!");
             return;
         }
-        sendImageToAPI(file);
+        sendImageToAPI(capturedFile);
     });
 
     // Send Image to API
     function sendImageToAPI(imageFile) {
         const formData = new FormData();
-        formData.append("file", imageFile);  // ✅ FIXED: Send as File, not Blob
+        formData.append("file", imageFile); // ✅ FIXED: Send as a File
 
         resultDiv.innerHTML = "";
         loadingDiv.classList.remove("hidden");
