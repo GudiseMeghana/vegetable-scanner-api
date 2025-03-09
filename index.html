@@ -110,18 +110,38 @@
     });
 
     function startCamera() {
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(camStream => {
-                stream = camStream;
-                video.srcObject = stream;
-                video.style.display = "block";
-                captureButton.classList.remove("hidden");
-                scanCapturedButton.classList.add("hidden");
-                startCameraButton.classList.add("hidden");
-                preview.style.display = "none"; // Hide uploaded image
-            })
-            .catch(err => console.error("Camera access denied!", err));
-    }
+    navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: { exact: "environment" } } // ✅ Force Back Camera on Mobile
+    })
+    .then(camStream => {
+        stream = camStream;
+        video.srcObject = stream;
+        video.style.display = "block";
+        captureButton.classList.remove("hidden");
+        scanCapturedButton.classList.add("hidden");
+        startCameraButton.classList.add("hidden");
+        preview.style.display = "none"; // Hide uploaded image
+    })
+    .catch(err => {
+        console.warn("Back camera not available, switching to default camera.");
+        fallbackToDefaultCamera(); // ✅ Try normal camera if back camera is unavailable
+    });
+}
+
+// ✅ Fallback for devices without a back camera
+function fallbackToDefaultCamera() {
+    navigator.mediaDevices.getUserMedia({ video: true })
+    .then(camStream => {
+        stream = camStream;
+        video.srcObject = stream;
+        video.style.display = "block";
+        captureButton.classList.remove("hidden");
+        scanCapturedButton.classList.add("hidden");
+        startCameraButton.classList.add("hidden");
+        preview.style.display = "none"; 
+    })
+    .catch(err => console.error("Camera access denied!", err));
+}
 
     // Capture Image from Video & Display in Preview
     captureButton.addEventListener("click", function() {
