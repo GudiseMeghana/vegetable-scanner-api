@@ -88,124 +88,131 @@
         <div id="result" class="mt-4 text-gray-300 font-semibold"></div>
     </div>
     
-    <script>
-        const apiUrl = "https://vegetable-scanner-api.onrender.com/predict/";
-        const video = document.getElementById("video");
-        const canvas = document.getElementById("canvas");
-        const startCameraButton = document.getElementById("startCamera");
-        const captureButton = document.getElementById("captureButton");
-        const scanCapturedButton = document.getElementById("scanCaptured");
-        const scanUploadedButton = document.getElementById("scanUploaded");
-        const fileInput = document.getElementById("imageInput");
-        const resultDiv = document.getElementById("result");
-        const loadingDiv = document.getElementById("loading");
-        const preview = document.getElementById("preview");
+<script>
+    const apiUrl = "https://vegetable-scanner-api.onrender.com/predict/";
+    const video = document.getElementById("video");
+    const canvas = document.getElementById("canvas");
+    const startCameraButton = document.getElementById("startCamera");
+    const captureButton = document.getElementById("captureButton");
+    const scanCapturedButton = document.getElementById("scanCaptured");
+    const scanUploadedButton = document.getElementById("scanUploaded");
+    const fileInput = document.getElementById("imageInput");
+    const resultDiv = document.getElementById("result");
+    const loadingDiv = document.getElementById("loading");
+    const preview = document.getElementById("preview");
 
-        let stream = null;
-        let capturedFile = null; // ✅ Store the captured image file
+    let stream = null;
+    let capturedFile = null; // ✅ Store the captured image file
 
-        // Start Webcam on Button Click
-        startCameraButton.addEventListener("click", function() {
-            navigator.mediaDevices.getUserMedia({ video: true })
-                .then(camStream => {
-                    stream = camStream;
-                    video.srcObject = stream;
-                    video.style.display = "block";
-                    captureButton.classList.remove("hidden");
-                    scanCapturedButton.classList.add("hidden");
-                    startCameraButton.classList.add("hidden");
-                    preview.style.display = "none"; // Hide uploaded image
-                })
-                .catch(err => console.error("Camera access denied!", err));
-        });
+    // Start Camera (Now Works Even After Capturing!)
+    startCameraButton.addEventListener("click", function() {
+        startCamera(); // ✅ Restart camera if clicked again
+    });
 
-        // Capture Image from Video & Display in Preview
-        captureButton.addEventListener("click", function() {
-            const context = canvas.getContext("2d");
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    function startCamera() {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(camStream => {
+                stream = camStream;
+                video.srcObject = stream;
+                video.style.display = "block";
+                captureButton.classList.remove("hidden");
+                scanCapturedButton.classList.add("hidden");
+                startCameraButton.classList.add("hidden");
+                preview.style.display = "none"; // Hide uploaded image
+            })
+            .catch(err => console.error("Camera access denied!", err));
+    }
 
-            // Convert canvas image to a Blob and show in preview
-            canvas.toBlob(blob => {
-                capturedFile = new File([blob], "captured_image.jpg", { type: "image/jpeg" }); // ✅ FIXED: Store the file
-                const capturedURL = URL.createObjectURL(blob);
-                preview.src = capturedURL;
+    // Capture Image from Video & Display in Preview
+    captureButton.addEventListener("click", function() {
+        const context = canvas.getContext("2d");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        // Convert canvas image to a Blob and show in preview
+        canvas.toBlob(blob => {
+            capturedFile = new File([blob], "captured_image.jpg", { type: "image/jpeg" }); // ✅ FIXED: Store the file
+            const capturedURL = URL.createObjectURL(blob);
+            preview.src = capturedURL;
+            preview.style.display = "block";
+            video.style.display = "none"; // Hide webcam
+            stopCamera();
+            scanCapturedButton.classList.remove("hidden"); // ✅ Show "Scan Captured Image" button
+            startCameraButton.classList.remove("hidden"); // ✅ Re-enable "Start Camera" after capture
+        }, "image/jpeg");
+    });
+
+    // Upload Image Manually
+    fileInput.addEventListener("change", function(event) {
+        if (stream) stopCamera(); // Stop camera if running
+
+        const file = event.target.files[0];
+        if (file) {
+            capturedFile = file; // ✅ Store uploaded file
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
                 preview.style.display = "block";
-                video.style.display = "none"; // Hide webcam
-                stopCamera();
-                scanCapturedButton.classList.remove("hidden"); // ✅ Show "Scan Captured Image" button
-            }, "image/jpeg");
-        });
-
-        // Upload Image Manually
-        fileInput.addEventListener("change", function(event) {
-            if (stream) stopCamera(); // Stop camera if running
-
-            const file = event.target.files[0];
-            if (file) {
-                capturedFile = file; // ✅ Store uploaded file
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = "block";
-                    video.style.display = "none"; // Hide video when uploading an image
-                    captureButton.classList.add("hidden");
-                    startCameraButton.classList.remove("hidden");
-                    scanCapturedButton.classList.add("hidden"); // Hide scan button for captured images
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // Scan Captured Image
-        scanCapturedButton.addEventListener("click", function() {
-            sendImageToAPI(capturedFile);
-        });
-
-        // Scan Uploaded Image
-        scanUploadedButton.addEventListener("click", function() {
-            if (!capturedFile) {
-                alert("Please upload an image first!");
-                return;
-            }
-            sendImageToAPI(capturedFile);
-        });
-
-        // Send Image to API
-        function sendImageToAPI(imageFile) {
-            const formData = new FormData();
-            formData.append("file", imageFile);
-
-            resultDiv.innerHTML = "";
-            loadingDiv.classList.remove("hidden");
-
-            fetch(apiUrl, {
-                method: "POST",
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                loadingDiv.classList.add("hidden");
-                resultDiv.innerHTML = `
-                    <p class="text-lg">Vegetable: <strong>${data.vegetable}</strong></p>
-                    <p class="text-lg">Confidence: <strong>${(data.confidence * 100).toFixed(2)}%</strong></p>
-                `;
-            })
-            .catch(error => {
-                loadingDiv.classList.add("hidden");
-                resultDiv.innerHTML = "<p class='text-red-500'>Error scanning image</p>";
-                console.error("Error:", error);
-            });
+                video.style.display = "none"; // Hide video when uploading an image
+                captureButton.classList.add("hidden");
+                startCameraButton.classList.remove("hidden");
+                scanCapturedButton.classList.add("hidden"); // Hide scan button for captured images
+            };
+            reader.readAsDataURL(file);
         }
+    });
 
-        function stopCamera() {
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-                stream = null;
-            }
-            video.style.display = "none";
+    // Scan Captured Image
+    scanCapturedButton.addEventListener("click", function() {
+        sendImageToAPI(capturedFile);
+    });
+
+    // Scan Uploaded Image
+    scanUploadedButton.addEventListener("click", function() {
+        if (!capturedFile) {
+            alert("Please upload an image first!");
+            return;
         }
-    </script>
+        sendImageToAPI(capturedFile);
+    });
+
+    // Send Image to API
+    function sendImageToAPI(imageFile) {
+        const formData = new FormData();
+        formData.append("file", imageFile);
+
+        resultDiv.innerHTML = "";
+        loadingDiv.classList.remove("hidden");
+
+        fetch(apiUrl, {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            loadingDiv.classList.add("hidden");
+            resultDiv.innerHTML = `
+                <p class="text-lg">Vegetable: <strong>${data.vegetable}</strong></p>
+                <p class="text-lg">Confidence: <strong>${(data.confidence * 100).toFixed(2)}%</strong></p>
+            `;
+        })
+        .catch(error => {
+            loadingDiv.classList.add("hidden");
+            resultDiv.innerHTML = "<p class='text-red-500'>Error scanning image</p>";
+            console.error("Error:", error);
+        });
+    }
+
+    function stopCamera() {
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            stream = null;
+        }
+        video.style.display = "none";
+        captureButton.classList.add("hidden");
+        startCameraButton.classList.remove("hidden"); // ✅ Now the button reappears!
+    }
+</script>
 </body>
 </html>
