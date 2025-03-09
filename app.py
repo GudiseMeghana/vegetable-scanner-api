@@ -1,14 +1,3 @@
-from fastapi.middleware.cors import CORSMiddleware
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Replace * with your frontend URL if hosted
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # Disable GPU usage for TensorFlow
 import os
 import uvicorn
 import numpy as np
@@ -17,9 +6,22 @@ from fastapi import FastAPI, File, UploadFile
 from tensorflow.keras.preprocessing.image import img_to_array
 from PIL import Image
 import io
+from fastapi.middleware.cors import CORSMiddleware
 
 # Initialize FastAPI app
 app = FastAPI()
+
+# Enable CORS (Move this after defining app)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Replace * with your frontend URL if needed
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Disable GPU usage for TensorFlow
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 # Root endpoint to check if API is live
 @app.get("/")
