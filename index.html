@@ -86,7 +86,7 @@
     </div>
     
     <script>
-        const apiUrl = "https://vegetable-scanner-api.onrender.com/predict/"; // Update with actual API URL
+        const apiUrl = "https://vegetable-scanner-api.onrender.com/predict/";
         const video = document.getElementById("video");
         const canvas = document.getElementById("canvas");
         const startCameraButton = document.getElementById("startCamera");
@@ -112,14 +112,19 @@
                 .catch(err => console.error("Camera access denied!", err));
         });
 
-        // Capture Image from Video
+        // Capture Image from Video & Display in Preview
         captureButton.addEventListener("click", function() {
             const context = canvas.getContext("2d");
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
+            // Convert canvas image to a Blob
             canvas.toBlob(blob => {
+                const capturedURL = URL.createObjectURL(blob);
+                preview.src = capturedURL;  // Show captured image
+                preview.style.display = "block";
+                video.style.display = "none"; // Hide webcam
                 stopCamera(); // Stop camera after capturing
                 sendImageToAPI(blob);
             }, "image/jpeg");
