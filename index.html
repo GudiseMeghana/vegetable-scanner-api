@@ -145,6 +145,7 @@
             canvas.height = video.videoHeight;
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
+            // Convert canvas image to Blob
             canvas.toBlob(blob => {
                 if (blob) {
                     sendImageToAPI(blob);
@@ -154,42 +155,32 @@
             setTimeout(scanLiveVideo, 2000); // ✅ Scan every 2 seconds
         }
 
-        // Auto-detect when image is uploaded
-        fileInput.addEventListener("change", function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = "block"; // Show preview
-                };
-                reader.readAsDataURL(file);
+        // Send Image to API
+        function sendImageToAPI(imageBlob) {
+            const formData = new FormData();
+            formData.append("file", imageBlob);
 
-                const formData = new FormData();
-                formData.append("file", file);
+            resultDiv.innerHTML = "Detecting...";
+            loadingDiv.classList.remove("hidden");
 
-                resultDiv.innerHTML = "Detecting...";
-                loadingDiv.classList.remove("hidden");
-
-                fetch(apiUrl, {
-                    method: "POST",
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    loadingDiv.classList.add("hidden");
-                    resultDiv.innerHTML = `
-                        <p class="text-lg">Vegetable: <strong>${data.vegetable}</strong></p>
-                        <p class="text-lg">Confidence: <strong>${(data.confidence * 100).toFixed(2)}%</strong></p>
-                    `;
-                })
-                .catch(error => {
-                    loadingDiv.classList.add("hidden");
-                    resultDiv.innerHTML = "<p class='text-red-500'>Error scanning image</p>";
-                    console.error("Error:", error);
-                });
-            }
-        });
+            fetch(apiUrl, {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                loadingDiv.classList.add("hidden");
+                resultDiv.innerHTML = 
+                    <p class="text-lg">Vegetable: <strong>${data.vegetable}</strong></p>
+                    <p class="text-lg">Confidence: <strong>${(data.confidence * 100).toFixed(2)}%</strong></p>
+                ;
+            })
+            .catch(error => {
+                loadingDiv.classList.add("hidden");
+                resultDiv.innerHTML = "<p class='text-red-500'>Error scanning image</p>";
+                console.error("Error:", error);
+            });
+        }
 
         // Stop Camera & Scanning
         stopCameraButton.addEventListener("click", function() {
