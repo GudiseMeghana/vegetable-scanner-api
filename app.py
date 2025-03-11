@@ -39,8 +39,29 @@ def create_products_table():
     conn.commit()
     conn.close()
 
-# Call function to ensure table exists
+def force_insert_products():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    
+    cursor.execute("DELETE FROM products;")
+
+   
+    vegetables = [
+        ("Bean", 2.00), ("Bitter Gourd", 2.50), ("Bottle Gourd", 1.80),
+        ("Brinjal", 2.30), ("Broccoli", 3.50), ("Cabbage", 1.50),
+        ("Capsicum", 3.00), ("Carrot", 2.00), ("Cauliflower", 2.80),
+        ("Cucumber", 1.80), ("Papaya", 2.50), ("Potato", 1.50),
+        ("Pumpkin", 1.80), ("Radish", 2.20), ("Tomato", 2.50)
+    ]
+
+    cursor.executemany("INSERT INTO products (name, price) VALUES (%s, %s)", vegetables)
+    conn.commit()
+    conn.close()
+
+#  Ensure the database is set up before running the API
 create_products_table()
+force_insert_products()  # This will run automatically when you deploy
 
 # Function to fetch Product ID & Price
 def get_product_details(vegetable_name):
