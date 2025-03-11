@@ -31,10 +31,11 @@ The dataset used for this project is the [Vegetable Image Dataset](https://www.k
 
 <h2 id="features">📌 Features</h2>
 
-- ✅ **Upload images to detect vegetables**  
-- ✅ **Live webcam scanning for real-time detection**  
-- ✅ **Confidence score for each prediction**  
-- ✅ **Fast and lightweight API**  
+-  **Upload images to detect vegetables**  
+-  **Live webcam scanning for real-time detection**  
+-  **Confidence score for each prediction**  
+-  **Database Integration (Product ID & Price)**
+-  **FastAPI Backend & PostgreSQL Database**
 
 <h2 id="tech-stack">🏗️ Tech Stack</h2>
 
@@ -59,12 +60,17 @@ The dataset used for this project is the [Vegetable Image Dataset](https://www.k
     - Install dependencies:  
         ```sh  
         pip install -r requirements.txt  
-        ```  
+        ```
+   -Set Up PostgreSQL Database
+   Create a Render PostgreSQL database and set the connection string in Render Environment Variables:
+       ```sh
+       DATABASE_URL=your_postgresql_connection_string
+       ``` 
     - Run the backend server:  
         ```sh  
         uvicorn main:app --reload  
         ```  
-3. **Set up the frontend:**  
+4. **Set up the frontend:**  
     - Open `index.html` in your preferred browser.  
 
 <h2 id="usage">🚀 Usage</h2>
@@ -101,9 +107,11 @@ The dataset used for this project is the [Vegetable Image Dataset](https://www.k
         ```  
     - **Response:**  
         ```json
-        {  
-            "vegetable": "Tomato",  
-            "confidence": 0.95  
+        {
+            "vegetable": "Bitter Gourd",
+            "confidence": 1,
+            "product_id": 2,
+            "price_per_kg": 2.5
         }  
         ```  
 
