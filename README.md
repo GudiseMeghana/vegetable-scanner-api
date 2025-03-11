@@ -10,6 +10,12 @@ Users can **upload an image or use their webcam** to scan vegetables in real tim
 🔗 **Live Frontend:** [https://vegetable-scanner.vercel.app](https://vegetable-scanner.vercel.app)  
 🔗 **GitHub Repo:** [https://github.com/GudiseMeghana/vegetable-scanner-api](https://github.com/GudiseMeghana/vegetable-scanner-api)  
 
+## Dataset
+
+The dataset used for this project is the [Vegetable Image Dataset](https://www.kaggle.com/datasets/misrakahmed/vegetable-image-dataset) from Kaggle.
+
+- Dataset URL: [Vegetable Image Dataset](https://www.kaggle.com/datasets/misrakahmed/vegetable-image-dataset)
+- Description: This dataset contains images of various vegetables. It is used to train and test the vegetable scanner model.
 ---
 
 ## 📌 Table of Contents  
