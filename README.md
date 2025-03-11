@@ -76,9 +76,13 @@ The dataset used for this project is the [Vegetable Image Dataset](https://www.k
 <h2 id="examples">📸 Examples</h2>
 
 - Example 1: Uploading an image of a tomato and getting the detection result.
-  ![Tomato Detection](examples/images/tomato_example.jpg)
+  ![Tomato Detection]![WhatsApp Image 2025-03-11 at 18 27 37](https://github.com/user-attachments/assets/4cae324b-f89b-4aee-9f2e-e1ae62ccb164)
+
+
 - Example 2: Using the webcam to scan a carrot in real time.
-  ![Carrot Detection](examples/images/carrot_example.jpg)
+  ![Carrot Detection]https://drive.google.com/file/d/1B526w0cYuBpqVc4RRAtsBFl-AhH5hPSW/view?usp=sharing
+
+
 
 <h2 id="api-documentation">📚 API Documentation</h2>
 
