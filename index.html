@@ -107,25 +107,6 @@
         });
 
         function startCamera() {
-            navigator.mediaDevices.getUserMedia({ 
-                video: { facingMode: { exact: "environment" } } 
-            })
-            .then(camStream => {
-                stream = camStream;
-                video.srcObject = stream;
-                video.style.display = "block";
-                captureButton.classList.remove("hidden");
-                scanUploadedButton.classList.add("hidden");
-                startCameraButton.classList.add("hidden");
-                preview.style.display = "none"; 
-            })
-            .catch(err => {
-                console.warn("Back camera not available, switching to default camera.");
-                fallbackToDefaultCamera();
-            });
-        }
-
-        function fallbackToDefaultCamera() {
             navigator.mediaDevices.getUserMedia({ video: true })
             .then(camStream => {
                 stream = camStream;
