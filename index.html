@@ -73,11 +73,7 @@
             Start Camera
         </button>
         <button id="captureButton" class="glow-btn bg-yellow-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-yellow-600 hidden">
-            Capture Image
-        </button>
-        
-        <button id="scanCaptured" class="glow-btn bg-purple-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-purple-600 hidden">
-            Scan Captured Image
+            Capture & Scan
         </button>
         
         <button id="scanUploaded" class="glow-btn bg-green-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-green-600 hidden">
@@ -97,7 +93,6 @@
         const canvas = document.getElementById("canvas");
         const startCameraButton = document.getElementById("startCamera");
         const captureButton = document.getElementById("captureButton");
-        const scanCapturedButton = document.getElementById("scanCaptured");
         const scanUploadedButton = document.getElementById("scanUploaded");
         const fileInput = document.getElementById("imageInput");
         const resultDiv = document.getElementById("result");
@@ -105,7 +100,6 @@
         const preview = document.getElementById("preview");
 
         let stream = null;
-        let capturedFile = null; 
 
         // Start Camera (Back Camera Support)
         startCameraButton.addEventListener("click", function() {
@@ -121,7 +115,6 @@
                 video.srcObject = stream;
                 video.style.display = "block";
                 captureButton.classList.remove("hidden");
-                scanCapturedButton.classList.add("hidden");
                 scanUploadedButton.classList.add("hidden");
                 startCameraButton.classList.add("hidden");
                 preview.style.display = "none"; 
@@ -139,7 +132,6 @@
                 video.srcObject = stream;
                 video.style.display = "block";
                 captureButton.classList.remove("hidden");
-                scanCapturedButton.classList.add("hidden");
                 scanUploadedButton.classList.add("hidden");
                 startCameraButton.classList.add("hidden");
                 preview.style.display = "none"; 
@@ -159,15 +151,12 @@
                     console.error("Image capture failed!");
                     return;
                 }
-                capturedFile = new File([blob], "captured_image.jpg", { type: "image/jpeg" });
+                let capturedFile = new File([blob], "captured_image.jpg", { type: "image/jpeg" });
 
                 preview.src = URL.createObjectURL(blob);
                 preview.style.display = "block";
                 video.style.display = "none";
                 stopCamera();
-
-                scanCapturedButton.classList.remove("hidden"); 
-                scanUploadedButton.classList.add("hidden"); 
 
                 sendImageToAPI(capturedFile);
             }, "image/jpeg");
@@ -178,18 +167,16 @@
 
             const file = event.target.files[0];
             if (file) {
-                capturedFile = file;
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = "block";
-                    video.style.display = "none";
-                    captureButton.classList.add("hidden");
-                    startCameraButton.classList.remove("hidden");
-                    scanCapturedButton.classList.add("hidden");
-                    scanUploadedButton.classList.remove("hidden"); 
-                };
-                reader.readAsDataURL(file);
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = "block";
+                video.style.display = "none";
+                captureButton.classList.add("hidden");
+                startCameraButton.classList.remove("hidden");
+                scanUploadedButton.classList.remove("hidden");
+
+                scanUploadedButton.addEventListener("click", function() {
+                    sendImageToAPI(file);
+                });
             }
         });
 
@@ -213,6 +200,7 @@
             .catch(error => {
                 loadingDiv.classList.add("hidden");
                 resultDiv.innerHTML = "<p class='text-red-500'>Error scanning image</p>";
+                console.error("API Error:", error);
             });
         }
     </script>
