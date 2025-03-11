@@ -79,7 +79,7 @@
             Scan Captured Image
         </button>
         
-        <button id="scanUploaded" class="glow-btn bg-green-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-green-600">
+        <button id="scanUploaded" class="glow-btn bg-green-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-green-600 hidden">
             Scan Uploaded Image
         </button>
         
@@ -121,6 +121,7 @@
                 video.style.display = "block";
                 captureButton.classList.remove("hidden");
                 scanCapturedButton.classList.add("hidden");
+                scanUploadedButton.classList.add("hidden");
                 startCameraButton.classList.add("hidden");
                 preview.style.display = "none"; 
             })
@@ -138,6 +139,7 @@
                 video.style.display = "block";
                 captureButton.classList.remove("hidden");
                 scanCapturedButton.classList.add("hidden");
+                scanUploadedButton.classList.add("hidden");
                 startCameraButton.classList.add("hidden");
                 preview.style.display = "none"; 
             })
@@ -158,7 +160,8 @@
                 preview.style.display = "block";
                 video.style.display = "none";
                 stopCamera();
-                scanCapturedButton.classList.remove("hidden");
+                scanCapturedButton.classList.remove("hidden"); // ✅ Show only "Scan Captured Image"
+                scanUploadedButton.classList.add("hidden"); // ✅ Hide "Scan Uploaded Image"
                 startCameraButton.classList.remove("hidden");
             }, "image/jpeg");
         });
@@ -176,7 +179,8 @@
                     video.style.display = "none";
                     captureButton.classList.add("hidden");
                     startCameraButton.classList.remove("hidden");
-                    scanCapturedButton.classList.add("hidden");
+                    scanCapturedButton.classList.add("hidden"); // ✅ Hide "Scan Captured Image"
+                    scanUploadedButton.classList.remove("hidden"); // ✅ Show "Scan Uploaded Image"
                 };
                 reader.readAsDataURL(file);
             }
@@ -187,10 +191,6 @@
         });
 
         scanUploadedButton.addEventListener("click", function() {
-            if (!capturedFile) {
-                alert("Please upload an image first!");
-                return;
-            }
             sendImageToAPI(capturedFile);
         });
 
@@ -218,14 +218,6 @@
                 resultDiv.innerHTML = "<p class='text-red-500'>Error scanning image</p>";
                 console.error("Error:", error);
             });
-        }
-
-        function stopCamera() {
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-                stream = null;
-            }
-            video.style.display = "none";
         }
     </script>
 </body>
