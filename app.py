@@ -21,17 +21,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load trained model
-model = tf.keras.models.load_model("vegetable_mobilenetv2_finetuned.h5")
-
-# Define class labels
-class_labels = ['Bean', 'Bitter Gourd', 'Bottle Gourd', 'Brinjal', 'Broccoli',
-                'Cabbage', 'Capsicum', 'Carrot', 'Cauliflower', 'Cucumber',
-                'Papaya', 'Potato', 'Pumpkin', 'Radish', 'Tomato']
-
 # Function to connect to PostgreSQL
 def get_db_connection():
     return psycopg2.connect(os.getenv("DATABASE_URL"))
+
+# Function to create the products table (if it doesn't exist)
+def create_products_table():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS products (
+            id SERIAL PRIMARY KEY,
+            name TEXT UNIQUE,
+            price REAL
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+# Call function to ensure table exists
+create_products_table()
 
 # Function to fetch Product ID & Price
 def get_product_details(vegetable_name):
@@ -45,6 +54,14 @@ def get_product_details(vegetable_name):
         return {"product_id": product[0], "price_per_kg": product[1]}
     else:
         return {"product_id": None, "price_per_kg": None}
+
+# Load trained model
+model = tf.keras.models.load_model("vegetable_mobilenetv2_finetuned.h5")
+
+# Define class labels
+class_labels = ['Bean', 'Bitter Gourd', 'Bottle Gourd', 'Brinjal', 'Broccoli',
+                'Cabbage', 'Capsicum', 'Carrot', 'Cauliflower', 'Cucumber',
+                'Papaya', 'Potato', 'Pumpkin', 'Radish', 'Tomato']
 
 # Image preprocessing function
 def preprocess_image(image: Image.Image):
@@ -78,7 +95,7 @@ async def predict(file: UploadFile = File(...)):
     except Exception as e:
         return {"error": str(e)}
 
-# API to manually check database records (since no Render shell access)
+# API to manually check database records
 @app.get("/show-products/")
 def show_products():
     try:
