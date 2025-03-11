@@ -61,11 +61,6 @@ The dataset used for this project is the [Vegetable Image Dataset](https://www.k
         ```sh  
         pip install -r requirements.txt  
         ```
-   - Set Up PostgreSQL Database:
-        - Create a Render PostgreSQL database and set the connection string in Render Environment Variables:
-        ```sh
-        DATABASE_URL=your_postgresql_connection_string
-        ```  
     - Run the backend server:  
         ```sh  
         uvicorn main:app --reload  
