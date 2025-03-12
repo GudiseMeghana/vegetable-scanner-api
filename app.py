@@ -75,7 +75,10 @@ def get_product_details(vegetable_name):
         return {"product_id": product[0], "price_per_kg": product[1]}
     else:
         return {"product_id": None, "price_per_kg": None}
+import tensorflow as tf
 
+
+tf.config.experimental.set_memory_growth(tf.config.experimental.list_physical_devices('CPU')[0], True)
 # Load trained model
 model = tf.keras.models.load_model("vegetable_mobilenetv2_finetuned.h5")
 
