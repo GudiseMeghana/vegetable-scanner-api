@@ -23,7 +23,13 @@ app.add_middleware(
 
 # Function to connect to PostgreSQL
 def get_db_connection():
-    return psycopg2.connect(os.getenv("DATABASE_URL"))
+    return psycopg2.connect(
+        dbname="veg-db",
+        user="root",
+        password="Meghana2004",
+        host="veg-db.cv20eo60cun7.ap-south-2.rds.amazonaws.com",
+        port=5432
+    )
 
 # Function to create the products table (if it doesn't exist)
 def create_products_table():
@@ -42,11 +48,9 @@ def create_products_table():
 def force_insert_products():
     conn = get_db_connection()
     cursor = conn.cursor()
-
     
     cursor.execute("DELETE FROM products;")
-
-   
+    
     vegetables = [
         ("Bean", 2.00), ("Bitter Gourd", 2.50), ("Bottle Gourd", 1.80),
         ("Brinjal", 2.30), ("Broccoli", 3.50), ("Cabbage", 1.50),
@@ -59,9 +63,9 @@ def force_insert_products():
     conn.commit()
     conn.close()
 
-#  Ensure the database is set up before running the API
+# Ensure the database is set up before running the API
 create_products_table()
-force_insert_products()  # This will run automatically when you deploy
+force_insert_products()
 
 # Function to fetch Product ID & Price
 def get_product_details(vegetable_name):
@@ -75,10 +79,7 @@ def get_product_details(vegetable_name):
         return {"product_id": product[0], "price_per_kg": product[1]}
     else:
         return {"product_id": None, "price_per_kg": None}
-import tensorflow as tf
 
-
-tf.config.experimental.set_memory_growth(tf.config.experimental.list_physical_devices('CPU')[0], True)
 # Load trained model
 model = tf.keras.models.load_model("vegetable_mobilenetv2_finetuned.h5")
 
