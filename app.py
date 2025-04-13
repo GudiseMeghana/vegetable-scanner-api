@@ -72,7 +72,7 @@ async def predict(file: UploadFile = File(...)):
         # Make prediction
         predictions = model.predict(processed_img)
         predicted_class = class_labels[np.argmax(predictions)]
-        confidence = float(np.max(predictions))
+        confidence = round(float(np.max(predictions)) * 100, 2)  
 
         # Get product info
         details = product_details.get(predicted_class, {"product_id": "Not Found", "price_per_kg": "N/A"})
