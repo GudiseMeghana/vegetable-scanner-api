@@ -1,6 +1,19 @@
-# 🌿 Vegetable Scanner API 🍅🥕🥦  
-
-**An AI-powered web app that detects vegetables from images using deep learning.**  
+<h1 align="center"><b>Vegetable Scanner API</b></h1>
+<p align="center"> 
+  <em>An AI-powered web app that detects vegetables from images using deep learning.</em>  
+</p>
+<p align="center">
+  <img src="https://img.shields.io/badge/Jupyter%20Notebook-F37626?logo=jupyter&logoColor=white&style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white&style=for-the-badge" />
+  <img src="https://img.shields.io/badge/HTML-FF5722?logo=html5&logoColor=white&style=for-the-badge" />
+  <img src="https://img.shields.io/badge/CSS-1572B6?logo=css3&logoColor=white&style=for-the-badge" />
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black&style=for-the-badge" />
+  <img src="https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white&style=for-the-badge" />
+  <img src="https://img.shields.io/badge/TensorFlow-FF6F00?logo=tensorflow&logoColor=white&style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Keras-D00000?logo=keras&logoColor=white&style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Vercel-000000?logo=vercel&logoColor=white&style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Render-46E3B7?logo=render&logoColor=white&style=for-the-badge" />
+</p>
 
 ## 🚀 Project Overview  
 This project uses a **CNN model (MobileNetV2)** trained on a **Kaggle dataset** to classify vegetables.  
