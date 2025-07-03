@@ -24,12 +24,13 @@ A cross-platform Flutter app that identifies vegetables from an image using a Fa
 ### 🔧 Installation
 
 1.  **Clone the repo**
-    bash git clone https://github.com/GudiseMeghana/vegetable-scanner-app.git 
+    bash git clone https://github.com/GudiseMeghana/vegetable-scanner-app.git
     cd vegetable-scanner-app
-2. **Install dependencies**
-   bash flutter pub get
-3. **Run the app**
-   bash flutter run
+2.  **Install dependencies**
+    bash flutter pub get
+3.  **Run the app**
+    bash flutter run
+
 ---
 
 ## 🔗 API Integration
@@ -38,32 +39,36 @@ The app connects to a FastAPI backend deployed at:
 
 [`https://vegetable-scanner-api.onrender.com/predict/`](https://vegetable-scanner-api.onrender.com/predict/)
 
--   Uses `multipart/form-data` POST requests
--   Receives structured JSON with:
-   -   `vegetable`
-   -   `confidence`
-   -   `product_id`
-   -   `price_per_kg`
+- Uses `multipart/form-data` POST requests
+- Receives structured JSON with:
+- `vegetable`
+- `confidence`
+- `product_id`
+- `price_per_kg`
 
 ---
 
 ## 📂 Folder Structure
-lib/ ├── main.dart # Main UI and logic assets/ 
-     └── icon.png # App launcher icon android/ # Platform-specific code for Android 
+
+lib/ ├── main.dart # Main UI and logic assets/
+└── icon.png # App launcher icon android/ # Platform-specific code for Android
+
 ---
 
 ## 🧪 Testing
 
 You can test on:
 
--   Android Emulator
--   Real Android phone (via APK)
--   iPhone Simulator (via Xcode)
--   Real iPhone (with Xcode provisioning)
+- Android Emulator
+- Real Android phone (via APK)
+- iPhone Simulator (via Xcode)
+- Real iPhone (with Xcode provisioning)
 
 ---
 
 ## 📸 Screenshots
+
+Below are screenshots of the app UI and prediction result. If the images do not display, ensure the files `ui.png` and `result.png` are present in the `screenshots/` folder (case-sensitive) and committed to your repository.
 
 <p align="center">
   <img src="screenshots/ui.png" width="250" alt="App UI Screenshot"/>
@@ -74,9 +79,9 @@ You can test on:
 
 ## ✨ Future Improvements
 
--   🗣️ Add voice output for results
--   🔍 Add search by vegetable name
--   🛒 Integrate with vegetable marketplaces
+- 🗣️ Add voice output for results
+- 🔍 Add search by vegetable name
+- 🛒 Integrate with vegetable marketplaces
 
 ---
 
