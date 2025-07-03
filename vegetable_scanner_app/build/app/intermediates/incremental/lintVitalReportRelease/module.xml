@@ -1,0 +1,18 @@
+<lint-module
+    format="1"
+    dir="/Users/meghanagudise/vegetable_scanner_app/android/app"
+    name=":app"
+    type="APP"
+    maven="android:app:"
+    agpVersion="8.1.0"
+    buildFolder="/Users/meghanagudise/vegetable_scanner_app/build/app"
+    bootClassPath="/Users/meghanagudise/Library/Android/sdk/platforms/android-34/android.jar:/Users/meghanagudise/Library/Android/sdk/build-tools/33.0.1/core-lambda-stubs.jar"
+    javaSourceLevel="1.8"
+    compileTarget="android-34">
+  <lintOptions
+      abortOnError="true"
+      absolutePaths="true"
+      checkReleaseBuilds="true"
+      explainIssues="true"/>
+  <variant name="release"/>
+</lint-module>

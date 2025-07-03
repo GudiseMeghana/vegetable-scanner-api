@@ -1,0 +1,4 @@
+#Tue Jun 17 22:54:24 IST 2025
+base.0=/Users/meghanagudise/vegetable_scanner_app/build/app/intermediates/dex/release/minifyReleaseWithR8/classes.dex
+renamed.0=classes.dex
+path.0=classes.dex
