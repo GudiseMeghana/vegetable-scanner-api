@@ -77,14 +77,6 @@ Below are screenshots of the app UI and prediction result. If the images do not 
 
 ---
 
-## ✨ Future Improvements
-
-- 🗣️ Add voice output for results
-- 🔍 Add search by vegetable name
-- 🛒 Integrate with vegetable marketplaces
-
----
-
 ## 👩‍💻 Developed By
 
 Meghana Gudise,Rithvika Punnam,Vaagdevi Challa,Sankrishna Kuchana,Vishwajitha Byru,Pruthan Jamalapuram
