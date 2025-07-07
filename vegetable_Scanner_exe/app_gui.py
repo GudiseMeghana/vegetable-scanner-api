@@ -81,10 +81,20 @@ def predict_image(image):
     details = product_details.get(label, {})
     return label, confidence, details
 
+def reset_display():
+    global cap
+    if cap and cap.isOpened():
+        cap.release()
+        cap = None
+    preview_label.configure(image="", text="")
+    preview_label.image = None
+    result_label.configure(text="")
+
 def show_result(label, conf, info):
     result_label.configure(text=f"Vegetable: {label}\nConfidence: {conf}%\n"
                                 f"Product ID: {info.get('product_id', '?')}\n"
                                 f"Price per kg: ₹{info.get('price_per_kg', '?')}")
+    result_label.after(5000, reset_display)
 
 def display_image(img):
     img = img.resize((300, 300))
