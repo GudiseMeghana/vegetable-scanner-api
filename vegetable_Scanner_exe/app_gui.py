@@ -53,7 +53,7 @@ app = ctk.CTk()
 app.geometry("640x640")
 app.title("Vegetable Scanner")
 
-frame = ctk.CTkFrame(app, corner_radius=20)
+frame = ctk.CTkScrollableFrame(app, corner_radius=20)
 frame.pack(padx=20, pady=20, expand=True, fill="both")
 
 title = ctk.CTkLabel(frame, text="Vegetable Scanner AI", font=("Poppins", 24))
@@ -94,7 +94,6 @@ def show_result(label, conf, info):
     result_label.configure(text=f"Vegetable: {label}\nConfidence: {conf}%\n"
                                 f"Product ID: {info.get('product_id', '?')}\n"
                                 f"Price per kg: ₹{info.get('price_per_kg', '?')}")
-    result_label.after(5000, reset_display)
 
 def display_image(img):
     img = img.resize((300, 300))
@@ -142,8 +141,6 @@ def capture_and_classify():
             label, conf, info = predict_image(img)
             show_result(label, conf, info)
 
-
-# Buttons
 btn_upload = ctk.CTkButton(frame, text="Upload Image", command=classify_from_file)
 btn_upload.pack(pady=10, ipadx=10, ipady=5)
 
@@ -152,5 +149,8 @@ btn_cam_start.pack(pady=10, ipadx=10, ipady=5)
 
 btn_cam_capture = ctk.CTkButton(frame, text="Scan Camera Frame", command=capture_and_classify)
 btn_cam_capture.pack(pady=10, ipadx=10, ipady=5)
+
+btn_clear = ctk.CTkButton(frame, text="Clear", command=reset_display)
+btn_clear.pack(pady=10, ipadx=10, ipady=5)
 
 app.mainloop()
