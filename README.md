@@ -19,9 +19,15 @@
 This project uses a **CNN model (MobileNetV2)** trained on a **Kaggle dataset** to classify vegetables.  
 Users can **upload an image or use their webcam** to scan vegetables in real time.  
 
+### 📱 **Multiple Platform Access:**
+- **🌐 Web App:** Browser-based vegetable scanner with webcam support
+- **📱 Mobile App:** Flutter-based Android/iOS app with camera integration and offline capabilities
+- **🔧 API:** RESTful API for developers to integrate vegetable recognition into their apps  
+
 🔗 **Live API:** [https://vegetable-scanner-api.onrender.com/docs](https://vegetable-scanner-api.onrender.com/docs)  
 🔗 **Live Frontend:** [https://vegetable-scanner.vercel.app](https://vegetable-scanner.vercel.app)  
 🔗 **GitHub Repo:** [https://github.com/GudiseMeghana/vegetable-scanner-api](https://github.com/GudiseMeghana/vegetable-scanner-api)  
+📱 **Mobile App:** [Download APK](https://github.com/GudiseMeghana/vegetable-scanner-api/releases/latest/download/app-release.apk) | [App Source Code](./vegetable_scanner_app/)  
 
 ## Dataset
 
@@ -33,6 +39,7 @@ The dataset used for this project is the [Vegetable Image Dataset](https://www.k
 
 ## 📌 Table of Contents  
 - [Features](#features)  
+- [Platform Access](#platform-access)
 - [Tech Stack](#tech-stack)  
 - [Installation](#installation)  
 - [Usage](#usage)  
@@ -49,13 +56,36 @@ The dataset used for this project is the [Vegetable Image Dataset](https://www.k
 -  **Confidence score for each prediction**  
 -  **Database Integration (Product ID & Price)**
 -  **FastAPI Backend & PostgreSQL Database**
+-  **📱 Mobile app with camera integration**
+
+<h2 id="platform-access">📱 Platform Access</h2>
+
+### 🌐 **Web Application**
+- **Live Demo:** [https://vegetable-scanner.vercel.app](https://vegetable-scanner.vercel.app)
+
+### 📱 **Mobile Application**
+- **📲 Download APK:** [Get Android App](https://github.com/GudiseMeghana/vegetable-scanner-api/releases/latest/download/app-release.apk)
+- **📂 Source Code:** [View App Folder](./vegetable_scanner_app/)
+- **Requirements:** Android 5.0+
+
+### 🔧 **Developer API**
+- **API Docs:** [https://vegetable-scanner-api.onrender.com/docs](https://vegetable-scanner-api.onrender.com/docs)
 
 <h2 id="tech-stack">🏗️ Tech Stack</h2>
 
+### 🌐 **Web Application**
 - **Backend:** FastAPI (Python)  
 - **Frontend:** HTML, CSS, JavaScript (Vercel)  
 - **Model:** CNN (TensorFlow/Keras)  
 - **Deployment:** Render (Backend) & Vercel (Frontend)  
+
+### 📱 **Mobile Application**
+- **Framework:** Flutter (Dart)
+- **Platform:** Android & iOS
+- **State Management:** StatefulWidget
+- **HTTP Client:** http package
+- **Image Handling:** image_picker package
+- **UI Components:** Material Design  
 
 <h2 id="installation">⚙️ Installation</h2>
 
