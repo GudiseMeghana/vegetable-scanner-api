@@ -33,7 +33,7 @@ Users can **upload an image or use their webcam** to scan vegetables in real tim
 🔗 **Live Frontend:** [https://vegetable-scanner.vercel.app](https://vegetable-scanner.vercel.app)  
 🔗 **GitHub Repo:** [https://github.com/GudiseMeghana/vegetable-scanner-api](https://github.com/GudiseMeghana/vegetable-scanner-api)  
 📱 **Mobile App:** [Download APK](https://github.com/GudiseMeghana/vegetable-scanner-api/releases/latest/download/app-release.apk) | [App Source Code](./vegetable_scanner_app/)  
-🖥️ **Desktop App:** [Download EXE](https://github.com/GudiseMeghana/vegetable-scanner-api/releases/latest/download/VegetableScanner.exe) | [App Source Code](./desktop_app/)  
+🖥️ **Desktop App:** [Download EXE](https://github.com/GudiseMeghana/vegetable-scanner-api/releases/latest/download/VegetableScanner.exe) | [App Source Code](./vegetable_Scanner_exe/)  
 
 ## Dataset
 
