@@ -32,8 +32,8 @@ Users can **upload an image or use their webcam** to scan vegetables in real tim
 🔗 **Live API:** [https://vegetable-scanner-api.onrender.com/docs](https://vegetable-scanner-api.onrender.com/docs)  
 🔗 **Live Frontend:** [https://vegetable-scanner.vercel.app](https://vegetable-scanner.vercel.app)  
 🔗 **GitHub Repo:** [https://github.com/GudiseMeghana/vegetable-scanner-api](https://github.com/GudiseMeghana/vegetable-scanner-api)  
-📱 **Mobile App:** [Download APK](https://github.com/GudiseMeghana/vegetable-scanner-api/releases/latest/download/app-release.apk) | [App Source Code](./vegetable_scanner_app/)  
-🖥️ **Desktop App:** [Download EXE](https://github.com/GudiseMeghana/vegetable-scanner-api/releases/latest/download/VegetableScanner.exe) | [App Source Code](./vegetable_Scanner_exe/)  
+📱 **Mobile App:** [Download APK](https://www.dropbox.com/scl/fi/r220e6jwtocnxe9zk66xs/LeafLense.apk?rlkey=xzrb3ln2dpk74lo4s2q8w6shn&st=1cm9j4g7&dl=1https://www.dropbox.com/scl/fi/r220e6jwtocnxe9zk66xs/LeafLense.apk?rlkey=xzrb3ln2dpk74lo4s2q8w6shn&st=1cm9j4g7&dl=1) | [App Source Code](./vegetable_scanner_app/)  
+🖥️ **Desktop App:** [Download EXE](https://drive.google.com/file/d/1l70z8In9TtBMDf4u1CgnvCyMJ43qyCvJ/view?usp=sharing) | [App Source Code](./vegetable_Scanner_exe/)  
 
 ## Dataset
 
@@ -73,6 +73,14 @@ The dataset used for this project is the [Vegetable Image Dataset](https://www.k
 - **📲 Download APK:** [Get Android App](https://www.dropbox.com/scl/fi/r220e6jwtocnxe9zk66xs/LeafLense.apk?rlkey=xzrb3ln2dpk74lo4s2q8w6shn&st=1cm9j4g7&dl=1)
 - **📂 Source Code:** [View App Folder](./vegetable_scanner_app/)
 - **Requirements:** Android 5.0+
+
+**How to Use (Mobile App):**
+1. Download the APK from the link above.
+2. Transfer the APK to your Android device (if downloaded on PC).
+3. On your device, open the APK file.
+4. If prompted, allow installation from unknown sources.
+5. Complete the installation.
+6. Open the app, grant camera/storage permissions, and start scanning vegetables!
 
 ### 🖥️ **Desktop Application (Windows EXE)**
 - **💻 Download EXE:** [Get Windows App](https://drive.google.com/file/d/1l70z8In9TtBMDf4u1CgnvCyMJ43qyCvJ/view?usp=sharing)
