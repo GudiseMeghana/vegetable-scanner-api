@@ -17,6 +17,7 @@
   <img src="https://img.shields.io/badge/Render-46E3B7?logo=render&logoColor=white&style=for-the-badge" />
   <img src="https://img.shields.io/badge/Windows-0078D6?logo=windows&logoColor=white&style=for-the-badge" />
   <img src="https://img.shields.io/badge/EXE-4B4B4B?logo=windows&logoColor=white&style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Tkinter-306998?logo=python&logoColor=white&style=for-the-badge" />
 </p>
 
 ## 🚀 Project Overview  
