@@ -8,11 +8,15 @@
   <img src="https://img.shields.io/badge/HTML-FF5722?logo=html5&logoColor=white&style=for-the-badge" />
   <img src="https://img.shields.io/badge/CSS-1572B6?logo=css3&logoColor=white&style=for-the-badge" />
   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black&style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Flutter-02569B?logo=flutter&logoColor=white&style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Dart-0175C2?logo=dart&logoColor=white&style=for-the-badge" />
   <img src="https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white&style=for-the-badge" />
   <img src="https://img.shields.io/badge/TensorFlow-FF6F00?logo=tensorflow&logoColor=white&style=for-the-badge" />
   <img src="https://img.shields.io/badge/Keras-D00000?logo=keras&logoColor=white&style=for-the-badge" />
   <img src="https://img.shields.io/badge/Vercel-000000?logo=vercel&logoColor=white&style=for-the-badge" />
   <img src="https://img.shields.io/badge/Render-46E3B7?logo=render&logoColor=white&style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Windows-0078D6?logo=windows&logoColor=white&style=for-the-badge" />
+  <img src="https://img.shields.io/badge/EXE-4B4B4B?logo=windows&logoColor=white&style=for-the-badge" />
 </p>
 
 ## 🚀 Project Overview  
@@ -22,12 +26,14 @@ Users can **upload an image or use their webcam** to scan vegetables in real tim
 ### 📱 **Multiple Platform Access:**
 - **🌐 Web App:** Browser-based vegetable scanner with webcam support
 - **📱 Mobile App:** Flutter-based Android/iOS app with camera integration and offline capabilities
+- **🖥️ Desktop App:** EXE file for Windows users
 - **🔧 API:** RESTful API for developers to integrate vegetable recognition into their apps  
 
 🔗 **Live API:** [https://vegetable-scanner-api.onrender.com/docs](https://vegetable-scanner-api.onrender.com/docs)  
 🔗 **Live Frontend:** [https://vegetable-scanner.vercel.app](https://vegetable-scanner.vercel.app)  
 🔗 **GitHub Repo:** [https://github.com/GudiseMeghana/vegetable-scanner-api](https://github.com/GudiseMeghana/vegetable-scanner-api)  
 📱 **Mobile App:** [Download APK](https://github.com/GudiseMeghana/vegetable-scanner-api/releases/latest/download/app-release.apk) | [App Source Code](./vegetable_scanner_app/)  
+🖥️ **Desktop App:** [Download EXE](https://github.com/GudiseMeghana/vegetable-scanner-api/releases/latest/download/VegetableScanner.exe) | [App Source Code](./desktop_app/)  
 
 ## Dataset
 
@@ -64,9 +70,14 @@ The dataset used for this project is the [Vegetable Image Dataset](https://www.k
 - **Live Demo:** [https://vegetable-scanner.vercel.app](https://vegetable-scanner.vercel.app)
 
 ### 📱 **Mobile Application**
-- **📲 Download APK:** [Get Android App](https://github.com/GudiseMeghana/vegetable-scanner-api/releases/latest/download/app-release.apk)
+- **📲 Download APK:** [Get Android App](https://www.dropbox.com/scl/fi/r220e6jwtocnxe9zk66xs/LeafLense.apk?rlkey=xzrb3ln2dpk74lo4s2q8w6shn&st=1cm9j4g7&dl=1)
 - **📂 Source Code:** [View App Folder](./vegetable_scanner_app/)
 - **Requirements:** Android 5.0+
+
+### 🖥️ **Desktop Application (Windows EXE)**
+- **💻 Download EXE:** [Get Windows App](https://drive.google.com/file/d/1l70z8In9TtBMDf4u1CgnvCyMJ43qyCvJ/view?usp=sharing)
+- **📂 Source Code:** [View Desktop App Folder](./vegetable_Scanner_exe/)
+- **How to use:** Download the EXE and double-click to run on Windows 10/11. No installation required. If you see a security warning, click "More info" and then "Run anyway."
 
 ### 🔧 **Developer API**
 - **API Docs:** [https://vegetable-scanner-api.onrender.com/docs](https://vegetable-scanner-api.onrender.com/docs)
@@ -86,6 +97,11 @@ The dataset used for this project is the [Vegetable Image Dataset](https://www.k
 - **HTTP Client:** http package
 - **Image Handling:** image_picker package
 - **UI Components:** Material Design  
+
+### 🖥️ **Desktop Application**
+- **Framework:** PyInstaller (for EXE conversion)
+- **Language:** Python
+- **Dependencies:** Same as backend requirements
 
 <h2 id="installation">⚙️ Installation</h2>
 
@@ -110,6 +126,17 @@ The dataset used for this project is the [Vegetable Image Dataset](https://www.k
         ```  
 4. **Set up the frontend:**  
     - Open `index.html` in your preferred browser.  
+5. **Set up the mobile app:**  
+    - Install Flutter SDK.
+    - Open the project in Android Studio or VS Code.
+    - Run `flutter pub get` to install dependencies.
+    - Connect a device or start an emulator.
+    - Run `flutter run` to launch the app.
+6. **Set up the desktop app:**  
+    - Install PyInstaller: `pip install pyinstaller`
+    - Navigate to the desktop app folder: `cd desktop_app`
+    - Build the EXE: `pyinstaller --onefile main.py`
+    - Find the EXE in the `dist` folder.
 
 <h2 id="usage">🚀 Usage</h2>
 
@@ -171,4 +198,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - TensorFlow/Keras for the deep learning framework.  
 - FastAPI for the web framework.  
 - Vercel for frontend hosting.  
-- Render for backend hosting.  
+- Render for backend hosting.
