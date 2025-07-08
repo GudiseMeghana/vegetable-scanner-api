@@ -38,6 +38,7 @@ class VegetableScannerPage extends StatefulWidget {
 }
 
 class _VegetableScannerPageState extends State<VegetableScannerPage> {
+  List<_ScannedItem> _scannedItems = [];
   File? _image;
   String _result = '';
   bool _loading = false;
@@ -50,11 +51,11 @@ class _VegetableScannerPageState extends State<VegetableScannerPage> {
         _image = File(picked.path);
         _result = '';
       });
-      _uploadImage(_image!);
+      await _uploadImage(_image!, picked.name, picked.path);
     }
   }
 
-  Future<void> _uploadImage(File imageFile) async {
+  Future<void> _uploadImage(File imageFile, String imageName, String imagePath) async {
     setState(() => _loading = true);
     final uri = Uri.parse("https://vegetable-scanner-api.onrender.com/predict/");
     final request = http.MultipartRequest('POST', uri);
@@ -67,12 +68,93 @@ class _VegetableScannerPageState extends State<VegetableScannerPage> {
     try {
       final response = await request.send();
       final body = await response.stream.bytesToString();
-      setState(() => _result = response.statusCode == 200 ? body : 'Error: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        final parsed = json.decode(body);
+        final now = DateTime.now();
+        final TextEditingController weightController = TextEditingController();
+        await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Enter Weight (kg)'),
+            content: TextField(
+              controller: weightController,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(hintText: 'Weight in kg'),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
+        final weight = weightController.text;
+        setState(() {
+          _scannedItems.add(_ScannedItem(
+            sno: _scannedItems.length + 1,
+            imageName: imageName,
+            timestamp: now,
+            description: parsed['vegetable'] ?? '',
+            weight: weight,
+            result: parsed,
+            imagePath: imagePath,
+          ));
+        });
+      }
+      setState(() => _result = response.statusCode == 200 ? body : 'Error: ${response.statusCode}');
     } catch (e) {
       setState(() => _result = 'Error: $e');
     } finally {
       setState(() => _loading = false);
     }
+  }
+
+  void _generateReport() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Scanned Report'),
+        content: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.9,
+          height: 400,
+          child: Scrollbar(
+            thumbVisibility: true,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minWidth: 600),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: DataTable(
+                    columns: const [
+                      DataColumn(label: Text('Sno.')),
+                      DataColumn(label: Text('Image')),
+                      DataColumn(label: Text('Timestamp')),
+                      DataColumn(label: Text('Description')),
+                      DataColumn(label: Text('Weight')),
+                    ],
+                    rows: _scannedItems.map((item) => DataRow(cells: [
+                      DataCell(Text(item.sno.toString())),
+                      DataCell(Text(item.imageName)),
+                      DataCell(Text(item.timestamp.toString())),
+                      DataCell(Text(item.description)),
+                      DataCell(Text(item.weight)),
+                    ])).toList(),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text('Close'),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildGradientButton({required String text, required IconData icon, required VoidCallback onPressed, required List<Color> colors}) {
@@ -161,6 +243,14 @@ class _VegetableScannerPageState extends State<VegetableScannerPage> {
         title: Text('Vegetable Scanner'),
         backgroundColor: Colors.green[700],
         centerTitle: true,
+        actions: [
+          if (_scannedItems.isNotEmpty)
+            IconButton(
+              icon: Icon(Icons.assignment),
+              tooltip: 'Generate Report',
+              onPressed: _generateReport,
+            ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -179,31 +269,53 @@ class _VegetableScannerPageState extends State<VegetableScannerPage> {
                 colors: [Colors.teal.shade600, Colors.teal.shade300],
                 onPressed: () => _getImage(ImageSource.gallery),
               ),
-              if (_image != null) ...[
+              if (_scannedItems.isNotEmpty) ...[
                 SizedBox(height: 20),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.file(_image!, height: 200),
+                Text('Scanned Items:', style: TextStyle(fontWeight: FontWeight.bold)),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: _scannedItems.length,
+                  itemBuilder: (context, idx) {
+                    final item = _scannedItems[idx];
+                    return Card(
+                      child: ListTile(
+                        leading: Icon(Icons.image),
+                        title: Text(item.description),
+                        subtitle: Text('Weight: ${item.weight} kg\n${item.timestamp}'),
+                        trailing: Text('Sno: ${item.sno}'),
+                      ),
+                    );
+                  },
                 ),
               ],
               if (_loading) Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: CircularProgressIndicator(color: Colors.green),
               ),
-              if (_result.isNotEmpty && !_loading)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 320),
-                      child: _buildResultCard(),
-                    ),
-                  ],
-                ),
             ],
           ),
         ),
       ),
     );
   }
+}
+
+class _ScannedItem {
+  final int sno;
+  final String imageName;
+  final DateTime timestamp;
+  final String description;
+  final String weight;
+  final Map result;
+  final String imagePath;
+  _ScannedItem({
+    required this.sno,
+    required this.imageName,
+    required this.timestamp,
+    required this.description,
+    required this.weight,
+    required this.result,
+    required this.imagePath,
+  });
 }
